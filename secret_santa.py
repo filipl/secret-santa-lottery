@@ -24,12 +24,16 @@ def body_file(filename):
 parser.add_argument("persons", metavar="person", nargs="+",
     help="A participant in the lottery - \"Name <email>\"", type=participant)
 parser.add_argument("--smtp", default="localhost", help="SMTP server")
+parser.add_argument("--tls", action="store_true", help="Use TLS")
+parser.add_argument("--port", type=int, default=25)
+parser.add_argument("--username", help="Username for SMTP login")
+parser.add_argument("--password", help="Password for SMTP login")
 parser.add_argument("--sender", default="lottery@example.com",
     help="Sender email address")
 parser.add_argument("--subject", default="Lottery!", help="Mail subject")
 parser.add_argument("--message-file", type=body_file, help="Message file",
     dest="path", required=True)
-parser.add_argument("--ignore-warnings", dest="ignore_warns", action='store_true',
+parser.add_argument("--ignore-warnings", dest="ignore_warns", action="store_true",
     help="Ignore warnings about the message file")
 
 args = parser.parse_args()
@@ -73,7 +77,12 @@ def mail_person(giver, receiver):
     msg['From'] = me
     msg['To'] = giver[1]
 
-    s = smtplib.SMTP(SMTP_SERVER)
+    s = smtplib.SMTP(host=SMTP_SERVER, port=args.port)
+    s.ehlo()
+    if args.tls:
+        s.starttls()
+    if args.username and args.password:
+        s.login(args.username, args.password)
     s.sendmail(me, [giver[1]], msg.as_string())
     s.quit()
 

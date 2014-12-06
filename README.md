@@ -14,9 +14,10 @@ Help
 ----
 
 ```
-usage: secret_santa.py [-h] [--smtp SMTP] [--sender SENDER]
-                       [--subject SUBJECT] --message-file PATH
-                       [--ignore-warnings]
+usage: secret_santa.py [-h] [--smtp SMTP] [--tls] [--port PORT]
+                       [--username USERNAME] [--password PASSWORD]
+                       [--sender SENDER] [--subject SUBJECT] --message-file
+                       PATH [--ignore-warnings]
                        person [person ...]
 
 Sceret Santa Lottery
@@ -27,6 +28,10 @@ positional arguments:
 optional arguments:
   -h, --help           show this help message and exit
   --smtp SMTP          SMTP server
+  --tls                Use TLS
+  --port PORT
+  --username USERNAME  Username for SMTP login
+  --password PASSWORD  Password for SMTP login
   --sender SENDER      Sender email address
   --subject SUBJECT    Mail subject
   --message-file PATH  Message file
